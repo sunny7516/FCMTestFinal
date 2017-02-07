@@ -29,8 +29,11 @@
         <activity
             android:name=".NewPostActivity"
             android:label="@string/title_activity_new_post"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".PostDetailActivity"
+            android:label="@string/title_activity_post_detail"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

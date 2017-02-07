@@ -13,7 +13,7 @@ import com.example.tacademy.recyclerviewtest.R;
  */
 
 public class PostViewHolder extends RecyclerView.ViewHolder {
-    ImageView profile, star;
+    public ImageView profile, star;
     TextView nickName, star_count, title, content;
 
     public PostViewHolder(View itemView) {

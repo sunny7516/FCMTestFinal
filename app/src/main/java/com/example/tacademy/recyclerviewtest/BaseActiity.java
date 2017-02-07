@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 /**
  * Created by Tacademy on 2017-02-03.
  */
@@ -44,5 +46,9 @@ public class BaseActiity  extends AppCompatActivity {
         if( pd != null && pd.isShowing() ) {
             pd.dismiss();
         }
+    }
+    // 나의 아이디
+    public String getUid(){
+        return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 }

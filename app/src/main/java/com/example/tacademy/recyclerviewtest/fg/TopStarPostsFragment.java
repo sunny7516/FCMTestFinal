@@ -1,30 +1,22 @@
 package com.example.tacademy.recyclerviewtest.fg;
 
 
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 
-import com.example.tacademy.recyclerviewtest.R;
-
-/**
- * A simple {@link Fragment} subclass.
+/** 내 글 중에서 별을 제일 많이 받은 글
  */
-public class TopStarPostsFragment extends Fragment {
-
+public class TopStarPostsFragment extends ParentFragment {
 
     public TopStarPostsFragment() {
         // Required empty public constructor
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_top_star_posts, container, false);
+    public Query getQuery(DatabaseReference databaseReference) {
+        Query query = databaseReference.child("user-posts").child(getUid())
+                .orderByChild("star_count");
+        return query;
     }
 
 }
