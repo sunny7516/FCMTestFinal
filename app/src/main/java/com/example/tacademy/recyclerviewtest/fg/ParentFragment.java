@@ -44,6 +44,9 @@ public abstract class ParentFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_total_posts, container, false);
         // 화면 구성 세팅..
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        //리사이클러뷰 위로 뭔가가 있어서 자동으로 올라가서 가려지면
+        // 이것을 넣어서 현재 위치를 유지시킨다.
+        recyclerView.setFocusable(false);
         // 레이아웃 세팅
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setStackFromEnd(true);
