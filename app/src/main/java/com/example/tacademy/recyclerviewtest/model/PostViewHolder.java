@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.tacademy.recyclerviewtest.Post;
 import com.example.tacademy.recyclerviewtest.R;
 
 /**

@@ -7,13 +7,23 @@ package com.example.tacademy.recyclerviewtest.model;
 public class User {
     String id;
     String email;
+    String token;
 
     public User() {
     }
 
-    public User(String id, String email) {
+    public User(String id, String email, String token) {
         this.id = id;
         this.email = email;
+        this.token = token;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getId() {

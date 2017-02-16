@@ -10,8 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.tacademy.recyclerviewtest.Post;
-import com.example.tacademy.recyclerviewtest.PostDetailActivity;
+import com.example.tacademy.recyclerviewtest.model.Post;
+import com.example.tacademy.recyclerviewtest.ui.post.PostDetailActivity;
 import com.example.tacademy.recyclerviewtest.R;
 import com.example.tacademy.recyclerviewtest.model.PostViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;

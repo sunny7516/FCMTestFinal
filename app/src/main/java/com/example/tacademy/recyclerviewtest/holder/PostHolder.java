@@ -1,11 +1,12 @@
-package com.example.tacademy.recyclerviewtest;
+package com.example.tacademy.recyclerviewtest.holder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.tacademy.recyclerviewtest.model.ChatMessage;
+import com.example.tacademy.recyclerviewtest.R;
+import com.example.tacademy.recyclerviewtest.model.ChatModel;
 
 /**
  * Created by Tacademy on 2017-02-02.
@@ -14,7 +15,6 @@ import com.example.tacademy.recyclerviewtest.model.ChatMessage;
 public class PostHolder extends RecyclerView.ViewHolder {
     TextView msg;
     TextView txt_left, txt_right;
-    int type;
     LinearLayout left_container;
     LinearLayout right_container;
 
@@ -46,15 +46,18 @@ public class PostHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public void bindOnPost(ChatMessage msg, int type) {
+    public void bindOnPost(ChatModel msg, String myNickname) {
+        // 이번에 표시할 메시지가 내가 쓴 글이다.
+        int type = 0;
+        if (msg.getSender().equals(myNickname)) type = 1;
         if (type == 1) {  //me
             right_container.setVisibility(View.VISIBLE);
             left_container.setVisibility(View.GONE);
-            txt_right.setText(msg.getMessage());
+            txt_right.setText(msg.getMsg());
         } else {  //you
             left_container.setVisibility(View.VISIBLE);
             right_container.setVisibility(View.GONE);
-            txt_left.setText(msg.getMessage());
+            txt_left.setText(msg.getMsg());
         }
     }
 }

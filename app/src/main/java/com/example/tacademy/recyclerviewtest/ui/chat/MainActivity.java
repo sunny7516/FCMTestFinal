@@ -1,4 +1,4 @@
-package com.example.tacademy.recyclerviewtest;
+package com.example.tacademy.recyclerviewtest.ui.chat;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -19,6 +19,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 
+import com.example.tacademy.recyclerviewtest.holder.PostHolder;
+import com.example.tacademy.recyclerviewtest.R;
 import com.example.tacademy.recyclerviewtest.model.ChatMessage;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -222,8 +224,7 @@ public class MainActivity extends AppCompatActivity {
             // 보이고자 하는 셀에 내용을 설정한다.
             //((PostHolder) holder).bindOnPost(arrayList.get(position));  //data[position]);
            // ((PostHolder) holder).bindOnPost(arrayList.get(position), index[position]);//data[position]);
-            ((PostHolder) holder).bindOnPost(arrayList.get(position), 1);
+           // ((PostHolder) holder).bindOnPost(arrayList.get(position), 1);
         }
     }
-
 }

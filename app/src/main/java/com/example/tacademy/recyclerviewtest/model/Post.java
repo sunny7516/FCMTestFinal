@@ -1,5 +1,6 @@
-package com.example.tacademy.recyclerviewtest;
+package com.example.tacademy.recyclerviewtest.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,7 +8,7 @@ import java.util.Map;
  * Created by Tacademy on 2017-02-06.
  */
 
-public class Post {
+public class Post implements Serializable { // 객체 직렬화
     // 제목
     String title;
     // 내용
@@ -31,7 +32,7 @@ public class Post {
         this.author = author;
     }
 
-    public Map<String, Object> toPostMap(){
+    public Map<String, Object> toPostMap() {
         Map<String, Object> map = new HashMap<>();
         map.put("title", title);
         map.put("content", content);
@@ -41,6 +42,14 @@ public class Post {
         map.put("stars", stars);
 
         return map;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getTitle() {

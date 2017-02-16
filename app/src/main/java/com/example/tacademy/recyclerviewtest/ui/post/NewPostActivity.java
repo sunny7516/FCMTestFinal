@@ -1,4 +1,4 @@
-package com.example.tacademy.recyclerviewtest;
+package com.example.tacademy.recyclerviewtest.ui.post;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,7 +9,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.tacademy.recyclerviewtest.R;
+import com.example.tacademy.recyclerviewtest.model.Post;
 import com.example.tacademy.recyclerviewtest.model.User;
+import com.example.tacademy.recyclerviewtest.ui.base.BaseActiity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,7 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NewPostActivity extends BaseActiity{
+public class NewPostActivity extends BaseActiity {
     EditText title, content;
     FloatingActionButton fab;
     FirebaseDatabase firebaseDatabase;

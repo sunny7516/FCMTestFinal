@@ -1,4 +1,4 @@
-package com.example.tacademy.recyclerviewtest;
+package com.example.tacademy.recyclerviewtest.ui.chat;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
+import com.example.tacademy.recyclerviewtest.R;
 import com.example.tacademy.recyclerviewtest.model.ChatMessage;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.tacademy.recyclerviewtest.PostDetailActivity"
+    tools:context="com.example.tacademy.recyclerviewtest.ui.post.PostDetailActivity"
     tools:showIn="@layout/activity_post_detail">
 
     <LinearLayout
@@ -45,6 +45,16 @@
                 android:onClick="onComment"
                 android:text="댓글입력" />
         </LinearLayout>
+        <!-- 채팅 신청 -->
+        <Button
+            android:id="@+id/chatBtn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/colorPrimary"
+            android:onClick="onChatRequest"
+            android:text="채팅신청"
+            android:textColor="#ffffff"
+            android:textStyle="bold" />
         <!-- 댓글 리스트 -->
         <android.support.v7.widget.RecyclerView
             android:id="@+id/detail_rv"

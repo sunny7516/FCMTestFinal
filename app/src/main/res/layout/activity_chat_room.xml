@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_main"
+    android:id="@+id/activity_chat_room"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.tacademy.recyclerviewtest.ui.chat.MainActivity">
+    tools:context="com.example.tacademy.recyclerviewtest.ui.chat.ChatRoomActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview"
@@ -17,7 +17,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:scrollbars="vertical"
-        tools:listitem="@layout/sendbird_view_group_user_message"/>
+        tools:listitem="@layout/sendbird_view_group_user_message" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,7 +38,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:text="전송"
-            android:onClick="onSend"/>
+            android:onClick="onSend"
+            android:text="전송" />
     </LinearLayout>
 </LinearLayout>

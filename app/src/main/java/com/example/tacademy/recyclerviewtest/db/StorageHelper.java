@@ -1,4 +1,4 @@
-package com.example.tacademy.recyclerviewtest;
+package com.example.tacademy.recyclerviewtest.db;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -53,5 +53,18 @@ public class StorageHelper {
     public Boolean getBoolean(Context context, String key) {
         return
                 context.getSharedPreferences(STORAGE_KEY, 0).getBoolean(key, false);
+    }
+    public void setInt(Context context, String key, int value) {
+        // 저장소 획득
+        SharedPreferences.Editor editor = context.getSharedPreferences(STORAGE_KEY, 0).edit();
+        // 저장
+        editor.putInt(key, value);
+        // 커밋
+        editor.commit();
+    }
+
+    public int getInt(Context context, String key) {
+        return
+                context.getSharedPreferences(STORAGE_KEY, 0).getInt(key, 0);
     }
 }
