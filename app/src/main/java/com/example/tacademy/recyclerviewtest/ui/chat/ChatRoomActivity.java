@@ -19,7 +19,12 @@ import com.example.tacademy.recyclerviewtest.holder.PostHolder;
 import com.example.tacademy.recyclerviewtest.model.ChatMessage;
 import com.example.tacademy.recyclerviewtest.model.ChatModel;
 import com.example.tacademy.recyclerviewtest.model.Post;
+import com.example.tacademy.recyclerviewtest.model.ReqSendFCM;
+import com.example.tacademy.recyclerviewtest.model.ResSendFCM;
+import com.example.tacademy.recyclerviewtest.net.RetroFitImpFactory;
 import com.example.tacademy.recyclerviewtest.ui.base.BaseActiity;
+import com.example.tacademy.recyclerviewtest.util.ChatPushModel;
+import com.example.tacademy.recyclerviewtest.util.U;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
@@ -29,6 +34,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ChatRoomActivity extends BaseActiity {
     // ui 관련 ======================================================================
@@ -47,9 +56,16 @@ public class ChatRoomActivity extends BaseActiity {
     //===============================================================================
 
     @Override
+    public void finish() {
+        U.getInstance().setChattingRoomInside(false);   // 채팅룸을 나갔다.
+        super.finish();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_room);
+        U.getInstance().setChattingRoomInside(true);        // 채팅룸에 진입했다
         // 데이터 받기 ===============================================================
         chatting_room_key = getIntent().getStringExtra("chatting_room_key");
         post = (Post) getIntent().getSerializableExtra("you");
@@ -117,7 +133,7 @@ public class ChatRoomActivity extends BaseActiity {
     // 전송 버튼 누르면 호출
     public void onSend(View view) {
         // 1. 입력데이터 추출
-        String msg = msg_input.getText().toString();
+        final String msg = msg_input.getText().toString();
         long sendTime = System.currentTimeMillis();
         ChatModel chatModel = new ChatModel(
                 getNickName(),
@@ -137,6 +153,26 @@ public class ChatRoomActivity extends BaseActiity {
                         if (task.isSuccessful()) {
                             Log.i("CHAT", "등록완료");
                             // 상대방에게 푸시메시지 발송!!
+                            // 상대방도 채팅방에서 채팅중이면 푸시메시지는 무시
+                            // 앱이 꺼져있다면 (노티 혹은 메시지 팝업) 알림 -> 닫기, 확인 -> 앱을 가동시켜서 -> 자동로그인 -> 채팅방 이동
+                            // 앱 내에 다른 위치에 있다면, 취향대로!!
+                            // (로그인 화면이 아닌 경우) -> 바로 진입
+                            ChatPushModel cpm = new ChatPushModel(chatting_room_key, msg, post.getAuthor(), post.getUid());
+                            Call<ResSendFCM> resSendFCMCall =
+                                    RetroFitImpFactory.getInstance().getService().sendFCM(new ReqSendFCM(post.getUid(), cpm.toString()));//상대방 UI, 메시지
+                            // 수행
+                            resSendFCMCall.enqueue(new Callback<ResSendFCM>() {
+                                @Override
+                                public void onResponse(Call<ResSendFCM> call, Response<ResSendFCM> response) {
+                                    // 성공 : response.body() = new Gson().fromJson(data, ResSendFCM.class);
+                                    Log.i("RETRO", response.body().getBody() + " : " + response.body().getCode());
+                                }
+
+                                @Override
+                                public void onFailure(Call<ResSendFCM> call, Throwable t) {
+                                    // 실패
+                                }
+                            });
                         } else {
                             Log.i("CHAT", "등록실패");
                         }

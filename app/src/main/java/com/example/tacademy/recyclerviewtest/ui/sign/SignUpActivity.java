@@ -13,9 +13,12 @@ import android.widget.Toast;
 
 import com.example.tacademy.recyclerviewtest.R;
 import com.example.tacademy.recyclerviewtest.db.StorageHelper;
+import com.example.tacademy.recyclerviewtest.model.Post;
 import com.example.tacademy.recyclerviewtest.model.User;
 import com.example.tacademy.recyclerviewtest.ui.base.BaseActiity;
+import com.example.tacademy.recyclerviewtest.ui.chat.ChatRoomActivity;
 import com.example.tacademy.recyclerviewtest.ui.post.CenterActivity;
+import com.example.tacademy.recyclerviewtest.util.ChatPushModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -34,18 +37,24 @@ public class SignUpActivity extends BaseActiity {
     FirebaseAuth firebaseAuth;
     DatabaseReference databaseReference;
 
+    //    String msg;
+    ChatPushModel cpm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        // 푸시 메시지를 전달 받았다(없을 수도 있음)
+        cpm = (ChatPushModel) getIntent().getSerializableExtra("FCM");
 
         // [1] 노티 관련 =======================================================================
-        NotificationManager notificationManager =   (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        if (notificationManager != null)    notificationManager.cancel(getIntent().getIntExtra("NOTI_ID", 0));
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager != null)
+            notificationManager.cancel(getIntent().getIntExtra("NOTI_ID", 0));
         // [2] 벳지 처리 =======================================================================
         // 벳지 초기화 (앱을 구동하면 무조건 뱃지를 0으로 만든다)
         // 만약 특정 메시지를 확인 후에 없애는 방식이면 그 지점으로 이동시킨다.
-        Intent intent = new Intent ("android.intent.action.BADGE_COUNT_UPDATE");
+        Intent intent = new Intent("android.intent.action.BADGE_COUNT_UPDATE");
         intent.putExtra("badge_count", 0);
         intent.putExtra("badge_count_package_name", getPackageName());
         intent.putExtra("badge_count_class_name", getComponentName().getClassName());
@@ -59,12 +68,12 @@ public class SignUpActivity extends BaseActiity {
         databaseReference = FirebaseDatabase.getInstance().getReference();
         // 만약에 UID가 로그인을 해야지만 활성화 된다면, 별도의 저장값을 유지하면 됨.
         // 이미 가입한 회원이면 회원가입 버튼을 비활성화 혹은 삭제
-        if(getUid() != null){
+        if (getUid() != null) {
             findViewById(R.id.signupBtn).setVisibility(View.GONE);
         }
         // 자동 로그인 처리 ===================================================================
-        String email =  StorageHelper.getInstance().getString(SignUpActivity.this, "email");
-        String pwd =    StorageHelper.getInstance().getString(SignUpActivity.this, "password");
+        String email = StorageHelper.getInstance().getString(SignUpActivity.this, "email");
+        String pwd = StorageHelper.getInstance().getString(SignUpActivity.this, "password");
         if (email != null && pwd != null && !email.equals("") && !pwd.equals("")) {
             email_et.setText(email);
             password_et.setText(pwd);
@@ -74,11 +83,12 @@ public class SignUpActivity extends BaseActiity {
         //String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         //Log.i("FCM", "토큰|" + refreshedToken);
     }
+
     /**
-       회원가입 2017.02.15
-       회원가입 버튼을 누르면 fb의 인증 쪽으로 이메일/비번이 등록된다.
-       //@param sunny
-    */
+     * 회원가입 2017.02.15
+     * 회원가입 버튼을 누르면 fb의 인증 쪽으로 이메일/비번이 등록된다.
+     * //@param sunny
+     */
     public void onSignUp(View view) {
         if (!isValidate()) return;
         // 1. 로딩
@@ -101,15 +111,16 @@ public class SignUpActivity extends BaseActiity {
                             // 5. 로그인 처리로 이동
                         } else {
                             // 실패
-                            Log.i("CHAT", "실패"+task.getException().getMessage());
-                            Toast.makeText(SignUpActivity.this, "회원가입실패:"+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Log.i("CHAT", "실패" + task.getException().getMessage());
+                            Toast.makeText(SignUpActivity.this, "회원가입실패:" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
+
     /**
      * fb 인증으로 가입 성공하면, fb 데이터베이스의 users 밑으로 회원 정보를 등록한다.
-     // @param sunny
+     * // @param sunny
      */
     public void onUserSaved(String emailParam) {
         // 가입 정보 재료 획득 =======================================================================
@@ -123,7 +134,7 @@ public class SignUpActivity extends BaseActiity {
             }
         }
         // 회원 정보를 디비에 입력
-        String id    = emailParam.split("@")[0];
+        String id = emailParam.split("@")[0];
         String email = emailParam;
         // 회원 정보 생성 ===========================================================================
         User user = new User(id, email, FirebaseInstanceId.getInstance().getToken());
@@ -139,6 +150,7 @@ public class SignUpActivity extends BaseActiity {
                     }
                 });
     }
+
     public void onLogin(View view) {
         if (!isValidate()) return;
         // 1. 로딩
@@ -172,6 +184,7 @@ public class SignUpActivity extends BaseActiity {
                 });
         if (!isValidate()) return;
     }
+
     public void updateToken() {
         DatabaseReference userReference = FirebaseDatabase.getInstance().getReference()
                 .child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -185,7 +198,7 @@ public class SignUpActivity extends BaseActiity {
                     return Transaction.success(mutableData);
                 }
                 String token = StorageHelper.getInstance().getString(SignUpActivity.this, "token");
-                if(token == null){
+                if (token == null) {
                     token = FirebaseInstanceId.getInstance().getToken();
                     StorageHelper.getInstance().setString(SignUpActivity.this, "token", token);
                 }
@@ -202,9 +215,19 @@ public class SignUpActivity extends BaseActiity {
             }
         });
     }
+
     public void goCenter() {
-        if (getIntent().getStringExtra("FCM") != null) {
-            // 채팅 푸시를 받고 자동로그인까지 했다
+        //if (getIntent().getStringExtra("FCM") != null) {
+        if (cpm != null) {
+            // 푸시 메시지 안에는 채팅채널값, 상대방 uid, 닉네임 등 정보가 같이 들어 있어야
+            // 채팅방으로 바로 들어갈 수 있다.
+            // 채팅 푸시를 받고 (자동)로그인까지 했다 -> ChatRoomActivity로 이동!
+            Intent intent = new Intent(this, ChatRoomActivity.class);
+            intent.putExtra("chatting_room_key", cpm.getChatting_room_key());
+            intent.putExtra("you", new Post("", "", cpm.getUid(), cpm.getNickname()));
+            startActivity(intent);
+            finish();
+
 //            Intent intent = new Intent(this, MainActivity2.class);
 //            startActivity(intent);
 //            finish();
@@ -215,6 +238,7 @@ public class SignUpActivity extends BaseActiity {
             finish();
         }
     }
+
     public boolean isValidate() {
         if (TextUtils.isEmpty(email_et.getText().toString())) {
             email_et.setError("이메일을 입력하세요");

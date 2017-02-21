@@ -16,7 +16,10 @@ public class TotalPostsFragment extends ParentFragment {
     @Override
     public Query getQuery(DatabaseReference databaseReference){
         // 쿼리수행
-        Query query = databaseReference.child("posts").limitToLast(10);
+        Query query = databaseReference.child("posts")
+                .orderByChild("gameName")
+                .startAt("2").endAt("2");
+                //.limitToLast(10);
         return query;
     }
 

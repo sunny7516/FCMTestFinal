@@ -9,12 +9,15 @@ import android.widget.TextView;
 
 import com.example.tacademy.recyclerviewtest.R;
 import com.example.tacademy.recyclerviewtest.ui.sign.SignUpActivity;
+import com.example.tacademy.recyclerviewtest.util.ChatPushModel;
 
 /**
- *  메시지가 오면 단독으로 뜬다 (폰이 꺼져 있어도 깨워서 뜬다)
+ * 메시지가 오면 단독으로 뜬다 (폰이 꺼져 있어도 깨워서 뜬다)
  */
 
 public class ShowPopupActivity extends AppCompatActivity {
+
+    ChatPushModel cpm;
 
     // 백키 무시
     @Override
@@ -26,10 +29,10 @@ public class ShowPopupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // 푸시 메시지 획득
-        String msg = getIntent().getStringExtra("FCM");
+        cpm = (ChatPushModel)getIntent().getSerializableExtra("FCM");
         // 윈도우 설정 : 잠겨있어도 보이고, 화면을 유지하고, 뒤를 블러처리하고
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON |
-        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND,
                 WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
@@ -38,20 +41,23 @@ public class ShowPopupActivity extends AppCompatActivity {
         // 화면 설정
         setContentView(R.layout.activity_show_popup);
         // 버튼 이벤트 처리
-        TextView content = (TextView)findViewById(R.id.content);
-        content.setText(msg);
+        TextView title = (TextView) findViewById(R.id.title);
+        title.setText(cpm.getNickname()+"님이 보낸 메시지");
+        TextView content = (TextView) findViewById(R.id.content);
+        content.setText(cpm.getMsg());
     }
 
     // 앱으로 이동
-    public void onOK(View view){
+    public void onOK(View view) {
         Intent intent = new Intent(this, SignUpActivity.class);
         // 푸시 메시지 전달
+        intent.putExtra("FCM", cpm);
         startActivity(intent);
         finish();
     }
 
     // 창만 닫고 끝
-    public void onClose(View view){
+    public void onClose(View view) {
         finish();
         //System.exit(0);
     }
